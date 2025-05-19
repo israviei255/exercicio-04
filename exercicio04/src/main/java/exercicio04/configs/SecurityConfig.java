@@ -1,7 +1,9 @@
 package exercicio04.configs;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,7 +36,11 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login").permitAll() // especificações de autorizacao
+                        // especificações de autorizacao
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/organizacoes/**").hasAnyAuthority(
+                                "ADMIN", "USER")
+                        .requestMatchers("/organizacoes/**", "/usuarios/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated() // caso nao seja especificado precisa ser autenticado
                 );
         return http.build();
@@ -42,6 +48,7 @@ public class SecurityConfig {
 
     //configuração de usuario
     @Bean
+    @ConditionalOnMissingBean(UserDetailsService.class) // se faltar algum bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) { // parametros injetam uma dependencia
         String password = encoder.encode("password");
         UserDetails userDetails = User.withUsername("user") //User é uma classe que implementa a interface UserDetails

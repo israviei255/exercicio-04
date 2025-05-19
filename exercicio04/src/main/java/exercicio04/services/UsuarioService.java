@@ -2,10 +2,11 @@ package exercicio04.services;
 
 import exercicio04.dtos.usuarios.UsuarioRequestDto;
 import exercicio04.dtos.usuarios.UsuarioResponseDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UsuarioService {
+public interface UsuarioService extends UserDetailsService {
 
     UsuarioResponseDto create(UsuarioRequestDto requestDto);
     List<UsuarioResponseDto> findAll();

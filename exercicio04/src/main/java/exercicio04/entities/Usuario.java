@@ -34,19 +34,19 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private UsuarioPerfil perfil = UsuarioPerfil.USER; //USER OU ADMIN
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UsuarioStatus status = UsuarioStatus.ACTIVE; // ACTIVE OU INATIVE
 
     // IMPLEMENTAÇÃO DO USERDETAILS
 
     @Override
     public String getPassword() {
-        return "";
+        return senha;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return nomeUsuario;
     }
 
     @Override

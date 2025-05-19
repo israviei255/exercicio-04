@@ -5,6 +5,8 @@ import exercicio04.dtos.usuarios.UsuarioResponseDto;
 import exercicio04.entities.Usuario;
 import exercicio04.mappers.UsuarioMapper;
 import exercicio04.repositories.UsuarioRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +69,11 @@ public class UsuarioServiceImpl implements UsuarioService {
             Usuario usuario = usuarioOpt.get();
             repository.delete(usuario);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String nomeUsuario) throws UsernameNotFoundException {
+        return repository.findByNomeUsuario(nomeUsuario)
+                .orElseThrow(() -> new UsernameNotFoundException(nomeUsuario));
     }
 }

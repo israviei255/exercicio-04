@@ -43,7 +43,7 @@ public class OrganizacaoController {
         return service.updateById(id, dto);
     }
 
-    @DeleteMapping
+    @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.deleteById(id);
